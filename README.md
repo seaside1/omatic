@@ -5,14 +5,14 @@ The component is generic and any type of equipment can be monitored as long as
 it is possible to read its power consumption.
 
 Examples of usage: 
-- Monitor your electrical car. Once the car has finished charging, you will get notified about the cost, consumption and time it took.
-- Monitor your dish washer, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
-- Send info when the power consumption is above certain limit for a device.
+- Monitor your electric car. Once the car has finished charging, you will get notified about the cost, consumption and time it took.
+- Monitor your dishwasher, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
+- Send info when the power consumption is above a certain limit for a device.
 
 <img src="https://raw.githubusercontent.com/seaside1/omatic/master/image/omatic.jpg" width=200 />
 
 Please take a look at ThomDietrich post in OpenHAB forums about monitoring your washingmachine https://community.openhab.org/t/washing-machine-state-machine/15587
-The aim of this binding is to simply the rules and doing the state transitions and calculations in a java binding.
+The aim of this binding is to simplify the rules and do the state transitions and calculations in a java binding.
 It should thus be easier to write smaller and simpler rules in DSL or Jython to handle the state Machine.
 
 ## States
@@ -36,7 +36,7 @@ If the powerInput is greater than the active threshold, the idle timer will be r
 If the configurable idle timer is exceeded the state machine will jump to the completed state
 
 ### Completed -> Active
-The state machine is restarted and active again. The input Power have to be greater than the active threshold.
+The state machine is restarted and active again. The input Power has to be greater than the active threshold.
 
 
 
@@ -90,15 +90,15 @@ The binding has no configuration options, all configuration is done at the Thing
 | Tot.Running Time   | String    | Total machine running time in seconds                                | Read        |
 | Tot.Running TimeStr| String    | Total machine running time formatted string                          | Read        |
 | State              | String    | Current state of the State machine                                   | Read        |
-| Started            | String    | Time stamp for when the machine was started                          | Read        |
-| Completed          | String    | Time stamp for when the machine was completed                        | Read        |
+| Started            | String    | Timestamp for when the machine was started                          | Read        |
+| Completed          | String    | Timestamp for when the machine was completed                        | Read        |
 | Running            | Switch    | On if the state machine is running                                   | Read        |
 | Disable            | Switch    | Will disable and stop the state machine                              | Write       |
 | Reset Meters       | Switch    | Will reset all statistics                                            | Write       |
 
 ## Full Example
 
-It's recommended to use PaperUI to add and configure the state machines, but this below is and example without the specification of the thing.
+It's recommended to use PaperUI to add and configure the state machines, but this below is an example without the specification of the thing.
 
 
 items/omatic.items
@@ -189,13 +189,13 @@ sitemap omatic label="State O-Matic Binding" {
 ```
 
 ## Getting Started
-In order to successfully monitor you electrical appliance, you should measure the power consumption while it is running.
+In order to successfully monitor your electrical appliance, you should measure the power consumption while it is running.
 Take a look at tools like Grafana to see spike in power and where it is generally at.
 Select a good active-threshold value in watts and also select a reasonable idle time in seconds. If it's not working
 and the state machine is completed when it should, adjust the values.
 
 ## Bridge Power values
-The binding is dependant on recieving power values, that is done via the power input channel. In order to create a bridge between the power plug or device measuring the power a rule needs to be created. For instance this is a ZWavePlug that will bridge all values into the binding
+The binding is dependent on receiving power values, that is done via the power input channel. In order to create a bridge between the power plug or device measuring the power a rule needs to be created. For instance this is a ZWavePlug that will bridge all values into the binding
 
 ```
 rule "BridgeOmaticPowerTest"
@@ -207,11 +207,11 @@ end
 ```
 
 ## Measured Energy vs Estimated Energy
-The binding can estimate the energy used by the state machine. This is a estimation that can be improved. Basically it will 
-take all recieved power values, calculate and average and use that in combination with the duration to estimate energy consumption.
+The binding can estimate the energy used by the state machine. This is an estimation that can be improved. Basically it will 
+take all received power values, calculate and average and use that in combination with the duration to estimate energy consumption.
 The other option is to use Measured Energy, which works in the same way as power. You send the energy input to the channel "Energy Input"
 the binding will take the last recieved value as a starting energy when the state machine is started, it will then check when the state machine
-is finished what the consumption is and take the difference between the two.
+is finished what the consumption is and takes the difference between the two.
 
 ## Roadmap
 
