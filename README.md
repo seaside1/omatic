@@ -10,14 +10,13 @@ Examples of usage:
 - Send info when the power consumption is above certain limit for a device.
 
 <img src="https://raw.githubusercontent.com/seaside1/omatic/master/image/omatic.jpg" width=200 />
-![Screenshot](https://raw.githubusercontent.com/seaside1/omatic/master/image/omatic.jpg =250x250)
 
 Please take a look at ThomDietrich post in OpenHAB forums about monitoring your washingmachine https://community.openhab.org/t/washing-machine-state-machine/15587
 The aim of this binding is to simply the rules and doing the state transitions and calculations in a java binding.
 It should thus be easier to write smaller and simpler rules in DSL or Jython to handle the state Machine.
 
 ## States
-![State Image](https://github.com/seaside1/omatic/blob/master/image/stateomatic.png)
+<img src="https://github.com/seaside1/omatic/blob/master/image/stateomatic.png" width=200 />
 
 The state machine has the following states: Not Started, Active, Idle, Completed.
 Where the state machine is considered to be running when the state is Active or Idle.
