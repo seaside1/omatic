@@ -163,6 +163,12 @@ then
 end
 ```
 
+## Getting Started
+In order to successfully monitor you electrical appliance, you should measure the power consumption while it is running.
+Take a look at tools like Grafana to see spike in power and where it is generally at.
+Select a good active-threshold value in watts and also select a reasonable idle time in seconds. If it's not working
+and the state machine is completed when it should, adjust the values.
+
 
 sitemaps/omatic.sitemap
 
