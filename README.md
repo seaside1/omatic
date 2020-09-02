@@ -167,12 +167,6 @@ then
 end
 ```
 
-## Getting Started
-In order to successfully monitor you electrical appliance, you should measure the power consumption while it is running.
-Take a look at tools like Grafana to see spike in power and where it is generally at.
-Select a good active-threshold value in watts and also select a reasonable idle time in seconds. If it's not working
-and the state machine is completed when it should, adjust the values.
-
 
 sitemaps/omatic.sitemap
 
@@ -183,6 +177,31 @@ sitemap omatic label="State O-Matic Binding" {
     }
 }
 ```
+
+## Getting Started
+In order to successfully monitor you electrical appliance, you should measure the power consumption while it is running.
+Take a look at tools like Grafana to see spike in power and where it is generally at.
+Select a good active-threshold value in watts and also select a reasonable idle time in seconds. If it's not working
+and the state machine is completed when it should, adjust the values.
+
+## Bridge Power values
+The binding is dependant on recieving power values, that is done via the power input channel. In order to create a bridge between the power plug or device measuring the power a rule needs to be created. For instance this is a ZWavePlug that will bridge all values into the binding
+
+```
+rule "BridgeOmaticPowerTest"
+when
+    Item ZwaveDevicePower received update
+then
+    OMTestMachinePowerIn.sendCommand(ZwaveDevicePower.state as DecimalType)
+end
+```
+
+## Measured Energy vs Estimated Energy
+The binding can estimate the energy used by the state machine. This is a estimation that can be improved. Basically it will 
+take all recieved power values, calculate and average and use that in combination with the duration to estimate energy consumption.
+The other option is to use Measured Energy, which works in the same way as power. You send the energy input to the channel "Energy Input"
+the binding will take the last recieved value as a starting energy when the state machine is started, it will then check when the state machine
+is finished what the consumption is and take the difference between the two.
 
 ## Roadmap
 
