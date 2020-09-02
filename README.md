@@ -116,7 +116,7 @@ Number   OMTestMachineTotalEnergy1     "Total Measured Energy [%.2f kWh]" (OMTes
 Number   OMTestMachineTotalEnergy2     "Total Estimated Energy [%.2f kWh]" (OMTestMachine) { channel="omatic:machine:e74a54e7:total-energy2" }
 Number   OMTestMachineTotalCost1     "Total Measured Cost [%.2f EUR]" (OMTestMachine) { channel="omatic:machine:e74a54e7:total-cost1" }
 Number   OMTestMachineTotalCost2     "Total Estimated Cost [%.2f EUR]" (OMTestMachine) { channel="omatic:machine:e74a54e7:total-cost2" }
-String   OMTestMachineState     "State [%s]" (OMTestMachine) { channel="omatic:machine:e74a54e7:state" }
+String   OMTestMachineState     "State is [MAP(omatic.map):%s]" (OMTestMachine) { channel="omatic:machine:e74a54e7:state" }
 Number   OMTestMachineTime     "Running Time [%ds]" (OMTestMachine) { channel="omatic:machine:e74a54e7:time" }
 String   OMTestMachineTimeStr     "Running Time [%s]" (OMTestMachine) { channel="omatic:machine:e74a54e7:time-str" }
 String   OMTestMachineStarted "Started [%s]" (OMTestMachine)  { channel="omatic:machine:e74a54e7:started" }
@@ -166,7 +166,15 @@ then
     //NotifySlack.sendCommand(result) //Example sending notification to slack
 end
 ```
-
+transform/omatic.map
+```
+NOT_STARTED=Not Started
+IDLE=Idle
+ACTIVE=Active
+COMPLETE=Complete
+-=Unknown
+NULL=Unknown
+```
 
 sitemaps/omatic.sitemap
 
