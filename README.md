@@ -9,6 +9,10 @@ Examples of usage:
 - Monitor your dish washer, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
 - Send info when the power consumption is above certain limit for a device.
 
+Please take a look at ThomDietrich post in OpenHAB forums about monitoring your washingmachine https://community.openhab.org/t/washing-machine-state-machine/15587
+The aim of this binding is to simply the rules and doing the state transitions and calculations in a java binding.
+It should thus be easier to write smaller and simpler rules in DSL or Jython to handle the state Machine.
+
 ## States
 ![Test Image 7](https://github.com/seaside1/omatic/blob/master/image/stateomatic.png)
 
