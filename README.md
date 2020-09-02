@@ -9,7 +9,7 @@ Examples of usage:
 - Monitor your dish washer, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
 - Send info when the power consumption is above certain limit for a device.
 
-![Screenshot](https://raw.githubusercontent.com/seaside1/omatic/master/image/omatic.jpg)
+![Screenshot](https://raw.githubusercontent.com/seaside1/omatic/master/image/omatic.jpg =250x250)
 
 Please take a look at ThomDietrich post in OpenHAB forums about monitoring your washingmachine https://community.openhab.org/t/washing-machine-state-machine/15587
 The aim of this binding is to simply the rules and doing the state transitions and calculations in a java binding.
