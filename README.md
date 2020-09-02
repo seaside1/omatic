@@ -10,6 +10,8 @@ Examples of usage:
 - Send info when the power consumption is above certain limit for a device.
 
 ## States
+![Test Image 7](https://github.com/seaside1/omatic/blob/master/image/stateomatic.png)
+
 The state machine has the following states: Not Started, Active, Idle, Completed.
 Where the state machine is considered to be running when the state is Active or Idle.
 The following transitions are possible:
