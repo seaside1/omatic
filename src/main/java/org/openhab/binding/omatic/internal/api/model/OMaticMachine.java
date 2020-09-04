@@ -39,7 +39,7 @@ import org.slf4j.helpers.MessageFormatter;
 @NonNullByDefault
 public class OMaticMachine {
 
-    private static final String LOG_GOING_FROM_STATE_TO_STATE = "Going from state: {} to state: {}";
+    private static final String LOG_GOING_FROM_STATE_TO_STATE = "Going from state: {} to state: {} inputPower: {}";
     private static final String LOG_IDLE_TIME_HAS_EXPIRED_CONFIG_IDLE_TIME_NOW_TIME_IDLE_TIME = "Idle time has expired: {} configIdleTime: {}, nowTime: {}, idleTime: {}";
     private static final String LOG_INPUT_POWER_LAST_KNOWN_POWER = "InputPower: {} last Known Power: {}";
     private static final String PREFIX_DEBUG_LOG = "[{}] [{}] {}";
@@ -102,9 +102,6 @@ public class OMaticMachine {
         cancelTimer();
         nowTimeStamp = Instant.now();
         power = getLastKnownPowerValue(inputPower);
-        if (logger.isDebugEnabled()) {
-            logDebug(LOG_INPUT_POWER_LAST_KNOWN_POWER, inputPower, getPower());
-        }
         oldState = state;
 
         // If state Machine is to be started
@@ -122,7 +119,7 @@ public class OMaticMachine {
             }
         }
         if (logger.isDebugEnabled() && oldState != state) {
-            logDebug(LOG_GOING_FROM_STATE_TO_STATE, oldState, state);
+            logDebug(LOG_GOING_FROM_STATE_TO_STATE, oldState, state, inputPower);
         }
         if (isRunning()) {
             updatePowerValues();
