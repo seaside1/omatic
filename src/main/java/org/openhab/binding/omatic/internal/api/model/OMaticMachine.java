@@ -39,10 +39,13 @@ import org.slf4j.helpers.MessageFormatter;
 @NonNullByDefault
 public class OMaticMachine {
 
+    private static final String LOG_GOING_FROM_STATE_TO_STATE = "Going from state: {} to state: {}";
+    private static final String LOG_IDLE_TIME_HAS_EXPIRED_CONFIG_IDLE_TIME_NOW_TIME_IDLE_TIME = "Idle time has expired: {} configIdleTime: {}, nowTime: {}, idleTime: {}";
+    private static final String LOG_INPUT_POWER_LAST_KNOWN_POWER = "InputPower: {} last Known Power: {}";
     private static final String PREFIX_DEBUG_LOG = "[{}] [{}] {}";
     private static final String PREFIX_INFO_LOG = "[{}] {}";
     private final DateTimeFormatter dateTimeFormatter;
-
+    private static final String LOG_DISABLED_STATE_MACHINE = "Disabled state machine, power input ignored";
     private volatile boolean disable = false;
     private PropertyChangeSupport propertyChangeSupport;
     private final Logger logger = LoggerFactory.getLogger(OMaticMachine.class);
@@ -93,19 +96,19 @@ public class OMaticMachine {
 
     public synchronized void powerInput(double inputPower) {
         if (disable) {
-            logDebug("Disabled state machine");
+            logDebug(LOG_DISABLED_STATE_MACHINE);
             return;
         }
-        logDebug("InputPower: {}", inputPower);
         cancelTimer();
         nowTimeStamp = Instant.now();
         power = getLastKnownPowerValue(inputPower);
-        logDebug("LastKnown Power: {}", getPower());
+        if (logger.isDebugEnabled()) {
+            logDebug(LOG_INPUT_POWER_LAST_KNOWN_POWER, inputPower, getPower());
+        }
         oldState = state;
 
         // If state Machine is to be started
         if (machineShouldBeStarted(power)) {
-            logDebug("Starting state Machine state: {}", toString());
             startStateMachine();
         } else if (isRunning() && isIdle(power)) { // Statemachine is runnning but idle
             setStateIdle();
@@ -118,15 +121,13 @@ public class OMaticMachine {
                 stateMachineCompleted();
             }
         }
-        if (oldState != state) {
-            logDebug("Going from state: {} to state: {}", oldState, state);
+        if (logger.isDebugEnabled() && oldState != state) {
+            logDebug(LOG_GOING_FROM_STATE_TO_STATE, oldState, state);
         }
         if (isRunning()) {
             updatePowerValues();
             startTimer();
         }
-        logDebug("Fire Property changed! : id: {}, Listener size: {}", "" + this.hashCode(),
-                "" + propertyChangeSupport.getPropertyChangeListeners().length);
         propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_POWER_INPUT, oldState, state);
     }
 
@@ -213,8 +214,9 @@ public class OMaticMachine {
         totalEnergy += energy;
         totalTime += runningTime;
 
-        logDebug("Completed machine running time: {}, totalTime: {}, maxPower: {}", runningTime, totalTime, maxPower);
-        logDebug("Completed machine: {}", toString());
+        if (logger.isDebugEnabled()) {
+            logDebug("Completed machine: {}", toString());
+        }
         state = OMaticMachineState.COMPLETE;
         propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_COMPLETED, oldState, state);
     }
@@ -222,7 +224,7 @@ public class OMaticMachine {
     @SuppressWarnings("null")
     private boolean idleTimeHasExpired() {
         Duration duration = Duration.between(idleTimeStamp, nowTimeStamp);
-        logDebug("Idle time has expired: {} configIdleTime: {}, nowTime: {}, idleTime: {}",
+        logDebug(LOG_IDLE_TIME_HAS_EXPIRED_CONFIG_IDLE_TIME_NOW_TIME_IDLE_TIME,
                 config.getIdleTime() <= duration.getSeconds(), config.getIdleTime(), nowTimeStamp.getEpochSecond(),
                 idleTimeStamp.getEpochSecond());
         return config.getIdleTime() <= duration.getSeconds();
@@ -408,5 +410,4 @@ public class OMaticMachine {
                 + ", nowTimeStamp=" + nowTimeStamp + ", oldState=" + oldState + ", startEnergyValue=" + startEnergyValue
                 + "]";
     }
-
 }

@@ -44,7 +44,7 @@ import org.slf4j.helpers.MessageFormatter;
 
 /**
  * The {@link OMaticClientThingHandler} is responsible for handling commands and status
- * updates for OMatic Wireless Devices.
+ * updates for OMatic State Machines.
  *
  * @author Joseph (Seaside) Hagberg - Initial contribution
  */
@@ -137,8 +137,6 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
 
     @SuppressWarnings("null")
     private void updateOnOffChannel(OMaticChannel channel, String channelId, OnOffType command) {
-        logDebug("Update OnOff via command channel: {} command: {} channelId: {}", channel.toString(),
-                command.toString(), channelId);
         switch (channel) {
             case RESET:
                 logInfo("Resetting all stored properies for thing");
@@ -161,8 +159,6 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
 
     @SuppressWarnings("null")
     private void updateNumericChannel(OMaticChannel channel, String channelId, DecimalType command) {
-        logDebug("Update Numeric via command channel: {} command: {} channelId: {}", channel.name(), command.toString(),
-                channelId);
         double dValue = command.doubleValue();
         switch (channel) {
             case ENERGY_INPUT:
@@ -258,7 +254,6 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     @SuppressWarnings("null")
     @Override
     public synchronized void propertyChange(@Nullable PropertyChangeEvent evt) {
-        logDebug("Property Changed: {}", evt.getPropertyName());
         if (evt.getPropertyName().equals(OMaticBindingConstants.PROPERTY_POWER_INPUT)) {
             refreshChannels();
             return;
