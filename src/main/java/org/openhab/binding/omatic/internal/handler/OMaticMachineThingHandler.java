@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.omatic.internal.handler;
 
-import static org.eclipse.smarthome.core.thing.ThingStatus.ONLINE;
+import static org.openhab.core.thing.ThingStatus.ONLINE;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,23 +20,23 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.thing.Channel;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
-import org.eclipse.smarthome.core.types.State;
-import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.omatic.internal.OMaticBindingConstants;
 import org.openhab.binding.omatic.internal.OMaticChannel;
 import org.openhab.binding.omatic.internal.OMaticMachineThingConfig;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachine;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachineUtil;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.StringType;
+import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.binding.BaseThingHandler;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.RefreshType;
+import org.openhab.core.types.State;
+import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
@@ -76,12 +76,14 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
         updateStatus(ONLINE);
     }
 
+    @SuppressWarnings("null")
     private void logDebug(String message, Object... parameters) {
         final FormattingTuple logMessage = MessageFormatter.arrayFormat(message, parameters);
         logger.debug(PREFIX_DEBUG_LOG, oMaticMachine != null ? oMaticMachine.getConfig().getName() : "", hashCode(),
                 logMessage.getMessage());
     }
 
+    @SuppressWarnings("null")
     private void logInfo(String message, Object... parameters) {
         final FormattingTuple logMessage = MessageFormatter.arrayFormat(message, parameters);
         logger.debug(PREFIX_INFO_LOG, oMaticMachine != null ? oMaticMachine.getConfig().getName() : "",
@@ -94,6 +96,7 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
         oMaticMachine.removePropertyChangeListener(this);
         oMaticMachine.terminate();
         oMaticMachine = null;
+        super.dispose();
     }
 
     @SuppressWarnings("null")

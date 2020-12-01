@@ -13,7 +13,7 @@
 package org.openhab.binding.omatic.internal;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingTypeUID;
 
 /**
  * The {@link OMaticBindingConstants} class defines common constants, which are
@@ -33,5 +33,4 @@ public class OMaticBindingConstants {
     public static final String PROPERTY_TOTAL_ENERGY = "TOTAL_MEASURED_ENERGY";
     public static final String PROPERTY_TOTAL_ESTIMATED_ENERGY = "TOTAL_ESTIMATED_ENERGY";
     public static final String PROPERTY_LAST_KNOWN_ENERGY_VALUE = "LAST_KNOWN_ENERGY_VALUE";
-
 }

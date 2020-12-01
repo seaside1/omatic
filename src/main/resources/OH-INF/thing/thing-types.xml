@@ -8,28 +8,28 @@
 		<label>State Machine</label>
 		<description>A State Machine representing an appliance, which will monitor and measure power and energy</description>
 		<channels>
-			<channel id="power-input" typeId="power-input" />
-			<channel id="energy-input" typeId="energy-input" />
-			<channel id="energy1" typeId="energy1" />
-			<channel id="energy2" typeId="energy2" />
-			<channel id="cost1" typeId="cost1" />
-			<channel id="cost2" typeId="cost2" />
-			<channel id="power" typeId="power" />
-			<channel id="max-power" typeId="max-power" />
-			<channel id="total-energy1" typeId="total-energy1" />
-			<channel id="total-energy2" typeId="total-energy2" />
-			<channel id="total-cost1" typeId="total-cost1" />
-			<channel id="total-cost2" typeId="total-cost2" />
-			<channel id="time" typeId="time" />
-			<channel id="time-str" typeId="time-str" />
-			<channel id="total-time" typeId="total-time" />
-			<channel id="total-time-str" typeId="total-time-str" />
-			<channel id="running" typeId="running" />
-			<channel id="state" typeId="state" />
-			<channel id="reset" typeId="reset" />
-			<channel id="started" typeId="started" />
-			<channel id="completed" typeId="completed" />
-			<channel id="disable" typeId="disable" />
+			<channel id="power-input" typeId="power-input"/>
+			<channel id="energy-input" typeId="energy-input"/>
+			<channel id="energy1" typeId="energy1"/>
+			<channel id="energy2" typeId="energy2"/>
+			<channel id="cost1" typeId="cost1"/>
+			<channel id="cost2" typeId="cost2"/>
+			<channel id="power" typeId="power"/>
+			<channel id="max-power" typeId="max-power"/>
+			<channel id="total-energy1" typeId="total-energy1"/>
+			<channel id="total-energy2" typeId="total-energy2"/>
+			<channel id="total-cost1" typeId="total-cost1"/>
+			<channel id="total-cost2" typeId="total-cost2"/>
+			<channel id="time" typeId="time"/>
+			<channel id="time-str" typeId="time-str"/>
+			<channel id="total-time" typeId="total-time"/>
+			<channel id="total-time-str" typeId="total-time-str"/>
+			<channel id="running" typeId="running"/>
+			<channel id="state" typeId="state"/>
+			<channel id="reset" typeId="reset"/>
+			<channel id="started" typeId="started"/>
+			<channel id="completed" typeId="completed"/>
+			<channel id="disable" typeId="disable"/>
 		</channels>
 		<representation-property>name</representation-property>
 		<config-description>
@@ -44,7 +44,7 @@
 			</parameter>
 			<parameter name="idleTime" type="integer" required="true">
 				<label>Idle Time</label>
-				<description>Time in seconds for the appliance to be idling, if this it's idling more than this time it will be 
+				<description>Time in seconds for the appliance to be idling, if this it's idling more than this time it will be
 					considered to be finished or not active.</description>
 				<default>50</default>
 			</parameter>

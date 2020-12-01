@@ -27,7 +27,7 @@ public class OMaticMachineThingConfig {
     private String name = "";
     private Double activeThreshold = -1.0;
     private Integer idleTime = -1;
-    private Double cost = new Double(1.0);
+    private Double cost = 1.0D;
     private String dateFormat = "YYYY-MM-dd HH:mm:ss";
     private long maxRunningTime = 60 * 60 * 24;
 

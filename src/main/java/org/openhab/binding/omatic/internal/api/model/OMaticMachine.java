@@ -41,7 +41,6 @@ public class OMaticMachine {
 
     private static final String LOG_GOING_FROM_STATE_TO_STATE = "Going from state: {} to state: {} inputPower: {}";
     private static final String LOG_IDLE_TIME_HAS_EXPIRED_CONFIG_IDLE_TIME_NOW_TIME_IDLE_TIME = "Idle time has expired: {} configIdleTime: {}, nowTime: {}, idleTime: {}";
-    private static final String LOG_INPUT_POWER_LAST_KNOWN_POWER = "InputPower: {} last Known Power: {}";
     private static final String PREFIX_DEBUG_LOG = "[{}] [{}] {}";
     private static final String PREFIX_INFO_LOG = "[{}] {}";
     private final DateTimeFormatter dateTimeFormatter;
@@ -54,25 +53,25 @@ public class OMaticMachine {
 
     private @Nullable Double powerInput;
     private @Nullable Double energyInput;
-    private Double power = new Double(0.0);
-    private Double energy = new Double(0.0);
-    private Double estimatedEnergy = new Double(0.0);
-    private Double maxPower = new Double(0.0);
-    private Double totalEnergy = new Double(0.0);
-    private Double totalEnergyEstimated = new Double(0.0);
+    private Double power = 0D;
+    private Double energy = 0D;
+    private Double estimatedEnergy = 0D;
+    private Double maxPower = 0D;
+    private Double totalEnergy = 0D;
+    private Double totalEnergyEstimated = 0D;
 
     private OMaticMachineState state = OMaticMachineState.NOT_STARTED;
 
     private int powerSampleCounter;
     private long totalPower;
-    private @Nullable Instant startedTimeStamp;
-    private @Nullable Instant completedTimeStamp;
+    private Instant startedTimeStamp = Instant.EPOCH;
+    private Instant completedTimeStamp = Instant.EPOCH;
     private @Nullable Instant lastPowerTimeStamp;
     private long totalTime;
     private double lastKnownEnergyValue = 0.0;
     private @Nullable ScheduledFuture<?> updateStateJob;
     protected final @Nullable ScheduledExecutorService scheduler;
-    private @Nullable Instant idleTimeStamp;
+    private Instant idleTimeStamp = Instant.EPOCH;
     private Instant nowTimeStamp = Instant.now();
     private @Nullable OMaticMachineState oldState;
     private double startEnergyValue;
@@ -167,18 +166,17 @@ public class OMaticMachine {
             maxPower = power;
             propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_MAX_POWER, oldMaxPower, maxPower);
         }
-
     }
 
     private synchronized void setStateActive() {
         state = OMaticMachineState.ACTIVE;
-        completedTimeStamp = null;
-        idleTimeStamp = null;
+        completedTimeStamp = Instant.EPOCH;
+        idleTimeStamp = Instant.EPOCH;
     }
 
     private synchronized void setStateIdle() {
         state = OMaticMachineState.IDLE;
-        if (idleTimeStamp == null) { // Idle for first time
+        if (idleTimeStamp == Instant.EPOCH) { // Idle for first time
             idleTimeStamp = nowTimeStamp;
         }
     }
@@ -192,6 +190,7 @@ public class OMaticMachine {
         return !isRunning() && isActive(power);
     }
 
+    @SuppressWarnings("null")
     private void cancelTimer() {
         if (updateStateJob != null) {
             updateStateJob.cancel(true);
@@ -269,7 +268,7 @@ public class OMaticMachine {
     }
 
     public long getRunningTime() {
-        if (startedTimeStamp == null) {
+        if (startedTimeStamp == Instant.EPOCH) {
             return -1;
         }
         return isRunning() ? Duration.between(startedTimeStamp, nowTimeStamp).getSeconds()
@@ -277,11 +276,11 @@ public class OMaticMachine {
     }
 
     public @Nullable String getCompletedTimeStr() {
-        return completedTimeStamp == null ? null : dateTimeFormatter.format(completedTimeStamp);
+        return completedTimeStamp == Instant.EPOCH ? null : dateTimeFormatter.format(completedTimeStamp);
     }
 
     public @Nullable String getStartedTimeStr() {
-        return startedTimeStamp == null ? null : dateTimeFormatter.format(startedTimeStamp);
+        return startedTimeStamp == Instant.EPOCH ? null : dateTimeFormatter.format(startedTimeStamp);
     }
 
     public String getRunningTimeString() {
@@ -342,7 +341,6 @@ public class OMaticMachine {
 
     public void setTotalTime(long totalTime) {
         this.totalTime = totalTime;
-
     }
 
     public Double getEstimatedEnergy() {

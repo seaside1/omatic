@@ -12,12 +12,13 @@
  */
 package org.openhab.binding.omatic.internal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.net.URISyntaxException;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachine;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachineState;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ import ch.qos.logback.classic.Logger;
 @NonNullByDefault
 public class OMaticTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         Logger rootLogger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         rootLogger.setLevel(Level.ALL);
@@ -47,12 +48,12 @@ public class OMaticTest {
         config.setTimerDelay(1);
         OMaticMachine machine = new OMaticMachine(null, config);
         machine.powerInput(100.0);
-        Assert.assertEquals(machine.getState(), OMaticMachineState.ACTIVE);
+        assertEquals(machine.getState(), OMaticMachineState.ACTIVE);
         machine.powerInput(9);
-        Assert.assertEquals(machine.getState(), OMaticMachineState.IDLE);
+        assertEquals(machine.getState(), OMaticMachineState.IDLE);
         Thread.sleep(1100);
         machine.powerInput(9);
-        Assert.assertEquals(OMaticMachineState.COMPLETE, machine.getState());
+        assertEquals(OMaticMachineState.COMPLETE, machine.getState());
     }
 }
 // Log info started completed

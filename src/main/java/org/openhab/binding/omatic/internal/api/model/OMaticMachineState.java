@@ -28,5 +28,4 @@ public enum OMaticMachineState {
     public String toString() {
         return this.name().toUpperCase();
     }
-
 }
