@@ -301,6 +301,10 @@ public class OMaticMachine {
         totalEnergyEstimated = 0D;
         totalPower = 0;
         totalTime = 0;
+        startedTimeStamp = Instant.EPOCH;
+        lastPowerTimeStamp = Instant.EPOCH;
+        completedTimeStamp = Instant.EPOCH;
+        state = OMaticMachineState.NOT_STARTED;
         power = 0D;
         energy = 0D;
         maxPower = 0D;
