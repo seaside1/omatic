@@ -124,7 +124,7 @@ public class OMaticMachine {
             updatePowerValues();
             startTimer();
         }
-        propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_POWER_INPUT, oldState, state);
+        propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_POWER_INPUT, null, state);
     }
 
     public void setLatKnownEnergyValue(double lastKnownEnergyValue) {
@@ -136,9 +136,8 @@ public class OMaticMachine {
             logDebug("Disabled state machine");
             return;
         }
-        final double oldValue = lastKnownEnergyValue;
         lastKnownEnergyValue = inputEnergy;
-        propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_LAST_KNOWN_ENERGY_VALUE, oldValue,
+        propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_LAST_KNOWN_ENERGY_VALUE, null,
                 lastKnownEnergyValue);
     }
 
