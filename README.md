@@ -176,7 +176,7 @@ and the state machine is completed when it should, adjust the values.
 
 Below is an example what it looks like running a washing Machine:
 
-<img src="doc/image/washingpower.png" width=200 />
+<img src="doc/image/washingpower.png" width=400 />
 
 Configuration for this state machine is Active Threshold: 45 and idle time: 120
 
