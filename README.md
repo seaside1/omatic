@@ -174,11 +174,11 @@ Take a look at tools like Grafana to see spike in power and where it is generall
 Select a good active-threshold value in watts and also select a reasonable idle time in seconds. If it's not working
 and the state machine is completed when it should, adjust the values.
 
-Below is an example what it looks like running my washing Machine:
+Below is an example what it looks like running a washing Machine:
 
-<img src="doc/image/washingpower.jpg" width=200 />
+<img src="doc/image/washingpower.png" width=200 />
 
-I'm using active Threshold: 45 and idle time: 120
+Configuration for this state machine is Active Threshold: 45 and idle time: 120
 
 ## Power values
 The binding is dependent on receiving power values, that is done by specifying an item name in the 
