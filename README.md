@@ -1,6 +1,6 @@
 # State O-Matic Binding
 The State O-Matic Binding will enable you to monitor electrical devices such as
-washing machine, dryer , dishwasher, electrical car charging and so on.
+washing machine, dryer, dishwasher, electrical car charging and so on.
 The component is generic and any type of equipment can be monitored as long as
 it is possible to read its power consumption.
 
@@ -9,14 +9,14 @@ Examples of usage:
 - Monitor your dishwasher, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
 - Send info when the power consumption is above a certain limit for a device.
 
-<img src="image/omatic.jpg" width=200 />
+<img src="doc/image/omatic.jpg" width=200 />
 
-Please take a look at ThomDietrich post in OpenHAB forums about monitoring your washingmachine https://community.openhab.org/t/washing-machine-state-machine/15587
+Please take a look at ThomDietrich's [post](https://community.openhab.org/t/washing-machine-state-machine/15587) in the openHAB forum about monitoring your washing machine.
 The aim of this binding is to simplify the rules and do the state transitions and calculations in a java binding.
 It should thus be easier to write smaller and simpler rules in DSL or Jython to handle the state Machine.
 
 ## States
-<img src="image/stateomatic.png" width=200 />
+<img src="doc/image/stateomatic.png" width=200 />
 
 The state machine has the following states: Not Started, Active, Idle, Completed.
 Where the state machine is considered to be running when the state is Active or Idle.
@@ -53,28 +53,26 @@ Discovery is currently not supported.
  
 The binding has no configuration options, all configuration is done at the Thing levels.
 
- 
 
 ## Thing Configuration
 
 
-| Parameter       | Description                                                                    | Config   | Default             |
-| ----------------|--------------------------------------------------------------------------------|--------- | --------------------|
-| Name            | The Name of the state machine i.e washingMachine, Dryer etc                    | Required | -                   |
-| Idle Time       | Time max time in seconds for the appliance to be idle                          | Required | 60                  |
-| Timer Delay     | Delay before checking the state if no power value has been provided.           | Required | 10                  |
-| Active Threshold| Threshold for when the appliance is to be transitioned to state active         | Required | 100                 |
-| Cost            | Cost for 1 kWh in your favorite  currency                                      | Required | 1.0                 |
-| Date Format     | Date and time format used for started / completed                              | Required | YYYY-MM-dd HH:mm:ss |
-
+| Parameter         | Description                                                                    | Config   | Default             |
+| ------------------|--------------------------------------------------------------------------------|--------- | --------------------|
+| Name              | The Name of the state machine i.e washingMachine, Dryer etc                    | Required | -                   |
+| Power Input Item  | The name of the Input Item for getting power values                            | Required | -                   |
+| Energy Input Item | The name of the Input Item for energy values                                   | Optional | -                   |
+| Idle Time         | Time max time in seconds for the appliance to be idle                          | Required | 60                  |
+| Timer Delay       | Delay before checking the state if no power value has been provided.           | Required | 10                  |
+| Active Threshold  | Threshold for when the appliance is to be transitioned to state active         | Required | 100                 |
+| Cost              | Cost for 1 kWh in your favorite  currency                                      | Required | 1.0                 |
+| Date Format       | Date and time format used for started / completed                              | Required | YYYY-MM-dd HH:mm:ss |
 
 
 ## Channels
 
 | Channel ID         | Item Type | Description                                                          | Permissions |
 |--------------------|-----------|--------------------------------------------------------------------- | ----------- |
-| Power Input        | Number    | Power input to the state machine                                     | Write       |
-| Energy Input       | Number    | Energy input to the state machine                                    | Write       |
 | Energy(Mea)        | Number    | Current measured machine consumption in kWh                          | Read        |
 | Energy(Est)        | Number    | Current estimated machine consumption in kWh                         | Read        |
 | Cost(Mea)          | Number    | Current measured cost in relation to kWh                             | Read        |
@@ -98,7 +96,7 @@ The binding has no configuration options, all configuration is done at the Thing
 
 ## Full Example
 
-It's recommended to use PaperUI to add and configure the state machines, but this below is an example without the specification of the thing.
+It's recommended to use OpenHAB GUI to add and configure the state machines, but this below is an example without the specification of the thing.
 
 
 items/omatic.items
@@ -106,10 +104,8 @@ items/omatic.items
 ```
 Group    gOMatic
 Group    OMTestMachine               "TestMachine"                       (gOMatic)
-Number   OMTestMachinePowerIn         "Power In [%.2f W]" (OMTestMachine) { channel="omatic:machine:e74a54e7:power-input" } 
-Number   OMTestMachineEnergyIn         "Energy In [%.2f kWh]" (OMTestMachine) { channel="omatic:machine:e74a54e7:energy-input" } 
 Number   OMTestMachinePower         "Power [%.2f W]" (OMTestMachine) { channel="omatic:machine:e74a54e7:power" } 
-Number   OMTestMachineEnergy1         "Energy Measured [%.2f kWh]" (OMTestMachine) { channel="omatic:machine:e74a54e7:energy1" }
+Number   OMTestMachineEnergy1         "Energy [%.2f kWh]" (OMTestMachine) { channel="omatic:machine:e74a54e7:energy1" }
 Number   OMTestMachineEnergy2         "Energy Estimated [%.2f kWh]" (OMTestMachine) { channel="omatic:machine:e74a54e7:energy2" }
 Number   OMTestMachineCost1         "Cost Measured [%.2f EUR]" (OMTestMachine) { channel="omatic:machine:e74a54e7:cost1" }
 Number   OMTestMachineCost2         "Cost Estimated [%.2f EUR]" (OMTestMachine) { channel="omatic:machine:e74a54e7:cost2" }
@@ -132,23 +128,7 @@ Switch   OMTestMachineDisable        "Disable [%s]"    (OMTestMachine) { channel
 ```
 
 rules/omatic.rules
-
 ```
-rule "BridgeOmaticPowerTest"
-when
-    Item ZwaveDevicePower received update
-then
-    OMTestMachinePowerIn.sendCommand(ZwaveDevicePower.state as DecimalType)
-end
-
-rule "BridgeOmaticEnergyTest"
-when
-    Item ZwaveReadingDeviceEnergy received update
-then
-    OMTestMachineEnergyIn.sendCommand(ZwaveDeviceEnergy.state as DecimalType)
-end
-
-
 rule "TestMachineCompleted"
 when 
     Item OMTestMachineRunning changed from ON to OFF
@@ -194,17 +174,10 @@ Take a look at tools like Grafana to see spike in power and where it is generall
 Select a good active-threshold value in watts and also select a reasonable idle time in seconds. If it's not working
 and the state machine is completed when it should, adjust the values.
 
-## Bridge Power values
-The binding is dependent on receiving power values, that is done via the power input channel. In order to create a bridge between the power plug or device measuring the power a rule needs to be created. For instance this is a ZWavePlug that will bridge all values into the binding
+## Power values
+The binding is dependent on receiving power values, that is done by specifying an item name in the 
+configuration for the Power values. The Item must be a Numeric item.
 
-```
-rule "BridgeOmaticPowerTest"
-when
-    Item ZwaveDevicePower received update
-then
-    OMTestMachinePowerIn.sendCommand(ZwaveDevicePower.state as DecimalType)
-end
-```
 
 ## Measured Energy vs Estimated Energy
 The binding can estimate the energy used by the state machine. This is an estimation that can be improved. Basically it will 

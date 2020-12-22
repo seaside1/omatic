@@ -8,8 +8,6 @@
 		<label>State Machine</label>
 		<description>A State Machine representing an appliance, which will monitor and measure power and energy</description>
 		<channels>
-			<channel id="power-input" typeId="power-input"/>
-			<channel id="energy-input" typeId="energy-input"/>
 			<channel id="energy1" typeId="energy1"/>
 			<channel id="energy2" typeId="energy2"/>
 			<channel id="cost1" typeId="cost1"/>
@@ -36,6 +34,14 @@
 			<parameter name="name" type="text" required="true">
 				<label>Name</label>
 				<description>Name of appliance, for instance washingmachine, dishwasher, dryingcabinet etc, must be unique</description>
+			</parameter>
+			<parameter name="powerInputItem" type="text" required="false">
+				<label>Power Input Item</label>
+				<description>Name of the Items for Input Power</description>
+			</parameter>
+			<parameter name="energyInputItem" type="text" required="false">
+				<label>Energy Input Item</label>
+				<description>Name of the Items for Input Energy</description>
 			</parameter>
 			<parameter name="activeThreshold" type="decimal" required="true">
 				<label>Active Threshold</label>
@@ -65,16 +71,6 @@
 			</parameter>
 		</config-description>
 	</thing-type>
-	<channel-type id="power-input">
-		<item-type>Number</item-type>
-		<label>Power Input</label>
-		<description>Power input to the state machine</description>
-	</channel-type>
-	<channel-type id="energy-input">
-		<item-type>Number</item-type>
-		<label>Energy Input</label>
-		<description>Energy input to the state machine</description>
-	</channel-type>
 	<channel-type id="energy1">
 		<item-type>Number</item-type>
 		<label>Energy(Measured)</label>
