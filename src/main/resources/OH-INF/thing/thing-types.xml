@@ -54,6 +54,10 @@
 					considered to be finished or not active.</description>
 				<default>50</default>
 			</parameter>
+			<parameter name="staticPower" type="decimal" required="false">
+				<label>Static Power(W)</label>
+				<description>Static power in Watts, for devices that can't supply power values</description>
+			</parameter>
 			<parameter name="cost" type="decimal" required="true">
 				<label>Cost</label>
 				<default>0.1</default>

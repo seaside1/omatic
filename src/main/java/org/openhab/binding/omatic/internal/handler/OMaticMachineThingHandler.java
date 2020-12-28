@@ -16,7 +16,9 @@ import static org.openhab.core.thing.ThingStatus.ONLINE;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -27,9 +29,11 @@ import org.openhab.binding.omatic.internal.api.model.OMaticMachine;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachineUtil;
 import org.openhab.binding.omatic.internal.event.OMaticEventSubscriber;
 import org.openhab.core.events.Event;
+import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.core.items.ItemRegistry;
 import org.openhab.core.items.events.ItemStateEvent;
+import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Channel;
@@ -63,6 +67,17 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
 
     private static final Logger logger = LoggerFactory.getLogger(OMaticMachineThingHandler.class);
 
+    private static Set<String> POWER_ITEM_TYPES = new HashSet<>();
+    static {
+        POWER_ITEM_TYPES.add(CoreItemFactory.SWITCH);
+        POWER_ITEM_TYPES.add(CoreItemFactory.NUMBER);
+    }
+
+    private static Set<String> ENERGY_ITEM_TYPES = new HashSet<>();
+    static {
+        ENERGY_ITEM_TYPES.add(CoreItemFactory.NUMBER);
+    }
+
     @Nullable
     private OMaticMachine oMaticMachine;
 
@@ -71,6 +86,8 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
 
     @NonNullByDefault({})
     private ItemRegistry itemRegistry;
+
+    private @Nullable Double staticPower = null;
 
     private OMaticMachineThingConfig config = getConfigAs(OMaticMachineThingConfig.class);
 
@@ -83,52 +100,79 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     @SuppressWarnings("null")
     @Override
     public final void initialize() {
+        staticPower = null;
         config = getConfigAs(OMaticMachineThingConfig.class);
         logDebug("SettingConfig name: {} config: {}", config.getName(), config.toString());
+
+        if (eventSubscriber == null) {
+            setErrorStatus("Eventsubscriber not initialized");
+            return;
+        }
+        final String powerInputItemName = config.getPowerInputItem().trim();
+        final String energyInputItemName = config.getEnergyInputItem().trim();
+        final Item powerInputItem = getItemFromRegistry(powerInputItemName);
+        if (powerInputItem == null) {
+            setErrorStatus("No item could be found for PowerInputItem name: " + powerInputItemName);
+            return;
+        }
+
+        if (!isCompatiblePowerType(powerInputItem)) {
+            setErrorStatus("PowerInputItem type Error: " + powerInputItem.getType());
+            return;
+        }
+
+        final Double staticPower = config.getStaticPower();
+        if (staticPower != null && staticPower > 0.0D) {
+            if (powerInputItem.getType().equals(CoreItemFactory.SWITCH)) {
+                this.staticPower = staticPower;
+            } else {
+                setErrorStatus("PowerInputItem static type Error: " + powerInputItem.getType());
+                return;
+            }
+        }
+
+        Item energyInputItem = getItemFromRegistry(energyInputItemName);
+        if (!energyInputItemName.isEmpty() && energyInputItem == null) {
+            setErrorStatus("Energy input item not found Error: " + energyInputItemName);
+            return;
+        } else {
+            if (energyInputItem != null && isCompatibleEnergyType(energyInputItem)) {
+                eventSubscriber.addItemItemName(energyInputItemName);
+            } else {
+                logDebug("No energy input item set, or incompatible type: {}", energyInputItemName);
+            }
+        }
+        logInfo("Initializing, setting status ONLINE");
         oMaticMachine = new OMaticMachine(scheduler, config);
         oMaticMachine.addPropertyChangeListener(this);
         restoreProperties();
-
-        if (eventSubscriber == null) {
-            String message = "Eventsubscriber not initialized";
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, message);
-            logger.error("OMatic Machine Offline due to failure: {}", message);
-            return;
-        }
         eventSubscriber.addPropertyChangeListener(this);
-        final String powerInputItem = config.getPowerInputItem().trim();
-        final String energyInputItem = config.getEnergyInputItem().trim();
-        if (isInItemRegistry(powerInputItem)) {
-            eventSubscriber.addItemItemName(powerInputItem);
-        } else {
-            final String message = "PowerInputItem name Error: " + powerInputItem;
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, message);
-            logger.error("OMatic Machine Offline due to failure: {}", message);
-            return;
-        }
-
-        if (energyInputItem.isEmpty() || isInItemRegistry(energyInputItem)) {
-            eventSubscriber.addItemItemName(energyInputItem);
-        } else {
-            final String message = "EnergyInputItem name Error: " + energyInputItem;
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, message);
-            logger.error("OMatic Machine Offline due to failure: {}", message);
-            return;
-        }
-        logInfo("Initializing, setting status ONLINE");
+        eventSubscriber.addItemItemName(powerInputItemName);
         updateStatus(ONLINE);
     }
 
-    private boolean isInItemRegistry(final String itemName) {
+    private void setErrorStatus(String message) {
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, message);
+        logger.error("OMatic Machine Offline due to failure: {}", message);
+    }
+
+    private boolean isCompatibleEnergyType(Item energyInputItem) {
+        return ENERGY_ITEM_TYPES.contains(energyInputItem.getType());
+    }
+
+    private @Nullable Item getItemFromRegistry(final String itemName) {
         if (!itemName.isEmpty()) {
             try {
-                itemRegistry.getItem(itemName);
-                return true;
+                return itemRegistry.getItem(itemName);
             } catch (ItemNotFoundException e) {
-                logger.debug("Failed to find Item: {} in registry", itemName);
+                logDebug("Failed to find Item: {} in registry", itemName);
             }
         }
-        return false;
+        return null;
+    }
+
+    private boolean isCompatiblePowerType(Item item) {
+        return POWER_ITEM_TYPES.contains(item.getType());
     }
 
     @SuppressWarnings("null")
@@ -141,7 +185,7 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     @SuppressWarnings("null")
     private void logInfo(String message, Object... parameters) {
         final FormattingTuple logMessage = MessageFormatter.arrayFormat(message, parameters);
-        logger.debug(PREFIX_INFO_LOG, oMaticMachine != null ? oMaticMachine.getConfig().getName() : "",
+        logger.info(PREFIX_INFO_LOG, oMaticMachine != null ? oMaticMachine.getConfig().getName() : "",
                 logMessage.getMessage());
     }
 
@@ -295,6 +339,7 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     @SuppressWarnings("null")
     @Override
     public synchronized void propertyChange(@Nullable PropertyChangeEvent evt) {
+        logDebug("Change event!");
         if (evt.getPropertyName().equals(OMaticEventSubscriber.PROPERTY_ITEM_EVENT)) {
             logDebug("Property change item event! : {}", ((Event) evt.getNewValue()).getTopic());
             handleEventUpdate((Event) evt.getNewValue());
@@ -337,23 +382,44 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
 
     @SuppressWarnings("null")
     private synchronized void handleEventUpdate(Event event) {
+        logDebug("Handle event: {}", event.getTopic());
         String itemName = null;
         String stringValue = null;
         if (event instanceof ItemStateEvent) {
             itemName = ((ItemStateEvent) event).getItemName();
+            logDebug("Name of state event: {} configName: {}", itemName, config.getPowerInputItem());
             stringValue = ((ItemStateEvent) event).getItemState().toFullString();
-            double value = 0;
-            try {
-                value = Double.parseDouble(stringValue);
-            } catch (NumberFormatException ex) {
-                logger.error("Failed to parse value from event {}", ((ItemStateEvent) event).getPayload());
-                return;
-            }
+            String type = ((ItemStateEvent) event).getType();
             if (itemName.equals(config.getPowerInputItem())) {
-                oMaticMachine.powerInput(value);
+                double itemValue = 0;
+                if (staticPower != null && staticPower > 0) {
+                    itemValue = stringValue.equals(OnOffType.ON.name()) ? staticPower : 0;
+                    logDebug("Got static value: {}", itemValue);
+                } else {
+                    try {
+                        itemValue = Double.parseDouble(stringValue);
+                        logDebug("Got number value: {}", itemValue);
+                    } catch (NumberFormatException ex) {
+                        logger.error("Failed to parse value from event {}", ((ItemStateEvent) event).getPayload());
+                        return;
+                    }
+                }
+                oMaticMachine.powerInput(itemValue);
             } else if (itemName.equals(config.getEnergyInputItem())) {
-                oMaticMachine.energyInput(value);
+                Double itemValue = null;
+                try {
+                    itemValue = Double.parseDouble(stringValue);
+                    oMaticMachine.energyInput(itemValue);
+                } catch (NumberFormatException ex) {
+                    logger.error("Failed to parse value from event {}", ((ItemStateEvent) event).getPayload());
+                    return;
+                }
+            } else {
+                logDebug("Failed to determine what to do with event: {}", event.getPayload());
+                logDebug("ItemName: {} configName: {}", itemName, config.getPowerInputItem());
             }
+        } else {
+            logDebug("Not parsing event, since no item state event: {}", event.getClass());
         }
     }
 
