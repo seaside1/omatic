@@ -182,7 +182,7 @@ Configuration for this state machine is Active Threshold: 45 and idle time: 120
 
 ## Power values
 The binding is dependent on receiving power values, that is done by specifying an item name in the 
-configuration for the Power values. The Item must be a Numeric item.
+configuration for the Power values. The Item must be either a Numeric item or a Switch item (for static power consumption monitoring).
 
 ## Measured Energy vs Estimated Energy
 The binding can estimate the energy used by the state machine. This is an estimation that can be improved. Basically it will 
