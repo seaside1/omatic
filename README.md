@@ -185,6 +185,13 @@ Configuration for this state machine is Active Threshold: 45 and idle time: 120
 The binding is dependent on receiving power values, that is done by specifying an item name in the 
 configuration for the Power values. The Item must be either a Numeric item or a Switch item (for static power consumption monitoring).
 
+## Static Power
+Lets say you have a device, a switch that does not support power measurement and you still would like to know the energy consumption.
+You can then use the static Power configuration. Start by measuring how much power it consumes with a standard wallsocket power meter.
+Lets say it consumes 57 W. You then have to enter 57 in the static Power configuration for the Omatic state machine as well as supplying 
+the name of the Switch in the Power Input Item Name. When the switch is turned ON it will assume the power consumption is 57 W until it is turned OFF. An OFF
+value results in a 0 W being reported to the state machine.
+
 ## Measured Energy vs Estimated Energy
 The binding can estimate the energy used by the state machine. This is an estimation that can be improved. Basically it will 
 take all received power values, calculate and average and use that in combination with the duration to estimate energy consumption.
