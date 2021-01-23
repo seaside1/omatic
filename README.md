@@ -17,9 +17,9 @@ It should thus be easier to write smaller and simpler rules in DSL or Jython to 
 
 
 ## Installation
-- Download jar file from here: (IMPORTANT, use download button on github otherwise the file will be corrupt)
--- OH3: https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar
--- OH2: https://github.com/seaside1/omatic/blob/master/bin/org.openhab.binding.omatic-OH2-alpha1.jar (not supported anymore) 
+- Download jar file from here: (IMPORTANT, use download button on github otherwise the file will be corrupt) <br>
+   OH3: https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar <br>
+   OH2: https://github.com/seaside1/omatic/blob/master/bin/org.openhab.binding.omatic-OH2-alpha1.jar (not supported anymore) <br> 
 - Verify filesize should be 34.5 kb: 
 - Copy the jar file to the addon foler usually located under /usr/share/openhab/addons
 - Restart openhab
