@@ -70,12 +70,12 @@ The binding has no configuration options, all configuration is done at the Thing
 | Parameter         | Description                                                                    | Config   | Default             |
 | ------------------|--------------------------------------------------------------------------------|--------- | --------------------|
 | Name              | The Name of the state machine i.e washingMachine, Dryer etc                    | Required | -                   |
-| Power Input Item  | The name of the Input Item for getting power values                            | Required | -                   |
-| Energy Input Item | The name of the Input Item for energy values                                   | Optional | -                   |
-| Idle Time         | Time max time in seconds for the appliance to be idle                          | Required | 60                  |
-| Static Power      | Static power in Watts, for devices that can't supply power values              | Optional | -                   |
-| Timer Delay       | Delay before checking the state if no power value has been provided.           | Required | 10                  |
-| Active Threshold  | Threshold for when the appliance is to be transitioned to state active         | Required | 100                 |
+| Power Input Item  | The name of the Input Item for getting power values (Unit W)                   | Required | -                   |
+| Energy Input Item | The name of the Input Item for energy values   (Unit kWh)                      | Optional | -                   |
+| Idle Time         | Time max time in seconds for the appliance to be idle   (Unit W)               | Required | 60                  |
+| Static Power      | Static power for devices that can't supply power values  (Unit W)              | Optional | -                   |
+| Timer Delay       | Delay (seconds) before checking the state if no power value has been provided. | Required | 10                  |
+| Active Threshold  | Threshold for when the appliance is to be transitioned to state active (Unit W)| Required | 100                 |
 | Cost              | Cost for 1 kWh in your favorite  currency                                      | Required | 1.0                 |
 | Date Format       | Date and time format used for started / completed                              | Required | YYYY-MM-dd HH:mm:ss |
 
