@@ -203,5 +203,4 @@ is finished what the consumption is and takes the difference between the two.
 * Better energy estimate calculations
 
 ## Resources
-
-https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar
+https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA4.jar/org.openhab.binding.omatic-3.x.x-ALPHA4.jar
