@@ -9,24 +9,22 @@ Examples of usage:
 - Monitor your dishwasher, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
 - Send info when the power consumption is above a certain limit for a device.
 
-<img src="doc/image/omatic.jpg" width=200 />
+<img src="https://raw.githubusercontent.com/seaside1/omatic/master/doc/image/omatic.jpg" width=200 />
 
 Please take a look at ThomDietrich's [post](https://community.openhab.org/t/washing-machine-state-machine/15587) in the openHAB forum about monitoring your washing machine.
 The aim of this binding is to simplify the rules and do the state transitions and calculations in a java binding.
 It should thus be easier to write smaller and simpler rules in DSL or Jython to handle the state Machine.
-
-
 ## Installation
 - Download jar file from here: (IMPORTANT, use download button on github otherwise the file will be corrupt) <br>
-   OH3: https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar <br>
-   OH2: https://github.com/seaside1/omatic/blob/master/bin/org.openhab.binding.omatic-OH2-alpha1.jar (not supported anymore) <br> 
+   https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar <br>
+   OH2 version found in https://github.com/seaside1/omatic/tree/master/bin (not supported anymore) <br> 
 - Verify filesize should be 34.5 kb: 
 - Copy the jar file to the addon foler usually located under /usr/share/openhab/addons
 - Restart openhab
 
 
 ## States
-<img src="doc/image/stateomatic.png" width=200 />
+<img src="https://raw.githubusercontent.com/seaside1/omatic/master/doc/image/stateomatic.png" width=200 />
 
 The state machine has the following states: Not Started, Active, Idle, Completed.
 Where the state machine is considered to be running when the state is Active or Idle.
@@ -48,8 +46,6 @@ If the configurable idle timer is exceeded the state machine will jump to the co
 ### Completed -> Active
 The state machine is restarted and active again. The input Power has to be greater than the active threshold.
 
-
-
 ## Supported Things
 - stateMachine - This will create a state machine, where you can configure idle time and
 active Threshold
@@ -66,16 +62,15 @@ The binding has no configuration options, all configuration is done at the Thing
 
 ## Thing Configuration
 
-
 | Parameter         | Description                                                                    | Config   | Default             |
 | ------------------|--------------------------------------------------------------------------------|--------- | --------------------|
 | Name              | The Name of the state machine i.e washingMachine, Dryer etc                    | Required | -                   |
-| Power Input Item  | The name of the Input Item for getting power values (Unit W)                   | Required | -                   |
-| Energy Input Item | The name of the Input Item for energy values   (Unit kWh)                      | Optional | -                   |
-| Idle Time         | Time max time in seconds for the appliance to be idle   (Unit W)               | Required | 60                  |
-| Static Power      | Static power for devices that can't supply power values  (Unit W)              | Optional | -                   |
-| Timer Delay       | Delay (seconds) before checking the state if no power value has been provided. | Required | 10                  |
-| Active Threshold  | Threshold for when the appliance is to be transitioned to state active (Unit W)| Required | 100                 |
+| Power Input Item  | The name of the Input Item for getting power values                            | Required | -                   |
+| Energy Input Item | The name of the Input Item for energy values                                   | Optional | -                   |
+| Idle Time         | Time max time in seconds for the appliance to be idle                          | Required | 60                  |
+| Static Power      | Static power in Watts, for devices that can't supply power values              | Optional | -                   |
+| Timer Delay       | Delay before checking the state if no power value has been provided.           | Required | 10                  |
+| Active Threshold  | Threshold for when the appliance is to be transitioned to state active         | Required | 100                 |
 | Cost              | Cost for 1 kWh in your favorite  currency                                      | Required | 1.0                 |
 | Date Format       | Date and time format used for started / completed                              | Required | YYYY-MM-dd HH:mm:ss |
 
@@ -187,20 +182,13 @@ and the state machine is completed when it should, adjust the values.
 
 Below is an example what it looks like running a washing Machine:
 
-<img src="doc/image/washingpower.png" width=400 />
+<img src="https://raw.githubusercontent.com/seaside1/omatic/master/doc/image/washingpower.png" width=400 />
 
 Configuration for this state machine is Active Threshold: 45 and idle time: 120
 
 ## Power values
 The binding is dependent on receiving power values, that is done by specifying an item name in the 
 configuration for the Power values. The Item must be either a Numeric item or a Switch item (for static power consumption monitoring).
-
-## Static Power
-Lets say you have a device, a switch that does not support power measurement and you still would like to know the energy consumption.
-You can then use the static Power configuration. Start by measuring how much power it consumes with a standard wallsocket power meter.
-Lets say it consumes 57 W. You then have to enter 57 in the static Power configuration for the Omatic state machine as well as supplying 
-the name of the Switch in the Power Input Item Name. When the switch is turned ON it will assume the power consumption is 57 W until it is turned OFF. An OFF
-value results in a 0 W being reported to the state machine.
 
 ## Measured Energy vs Estimated Energy
 The binding can estimate the energy used by the state machine. This is an estimation that can be improved. Basically it will 
@@ -213,3 +201,7 @@ is finished what the consumption is and takes the difference between the two.
 
 * More statistics, Average Cost, average consumption, average power usage etc
 * Better energy estimate calculations
+
+## Resources
+
+https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar
