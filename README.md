@@ -208,4 +208,4 @@ Alpha5
 - Fixed Number:Energy and Number:Power
 
 ## Resources
-https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA5.jar/org.openhab.binding.omatic-3.x.x-ALPHA5.jar
+https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA5/org.openhab.binding.omatic-3.x.x-ALPHA5.jar
