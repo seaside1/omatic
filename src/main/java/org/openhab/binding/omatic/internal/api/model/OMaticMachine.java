@@ -93,7 +93,7 @@ public class OMaticMachine {
         logger.info(PREFIX_INFO_LOG, config.getName(), logMessage.getMessage());
     }
 
-    public synchronized void powerInput(double inputPower) {
+    public void powerInput(double inputPower) {
         if (disable) {
             logDebug(LOG_DISABLED_STATE_MACHINE);
             return;
@@ -167,13 +167,13 @@ public class OMaticMachine {
         }
     }
 
-    private synchronized void setStateActive() {
+    private void setStateActive() {
         state = OMaticMachineState.ACTIVE;
         completedTimeStamp = Instant.EPOCH;
         idleTimeStamp = Instant.EPOCH;
     }
 
-    private synchronized void setStateIdle() {
+    private void setStateIdle() {
         state = OMaticMachineState.IDLE;
         if (idleTimeStamp == Instant.EPOCH) { // Idle for first time
             idleTimeStamp = nowTimeStamp;
@@ -185,7 +185,7 @@ public class OMaticMachine {
         return duration.getSeconds() >= config.getMaxRunningTime();
     }
 
-    private synchronized boolean machineShouldBeStarted(double power) {
+    private boolean machineShouldBeStarted(double power) {
         return !isRunning() && isActive(power);
     }
 
@@ -208,10 +208,7 @@ public class OMaticMachine {
         totalEnergyEstimated += estimatedEnergy;
         totalEnergy += energy;
         totalTime += runningTime;
-
-        if (logger.isDebugEnabled()) {
-            logDebug("Completed machine: {}", toString());
-        }
+        logDebug("Completed machine: {}", toString());
         state = OMaticMachineState.COMPLETE;
         propertyChangeSupport.firePropertyChange(OMaticBindingConstants.PROPERTY_COMPLETED, oldState, state);
     }
@@ -258,11 +255,11 @@ public class OMaticMachine {
         logInfo("Starting state Machine: {}", getStartedTimeStr());
     }
 
-    public synchronized boolean isRunning() {
+    public boolean isRunning() {
         return state == OMaticMachineState.ACTIVE || state == OMaticMachineState.IDLE;
     }
 
-    public synchronized void run() {
+    public void run() {
         powerInput(-1.0);
     }
 
@@ -290,11 +287,11 @@ public class OMaticMachine {
         return OMaticMachineUtil.convertSecondsToTimeString(getTotalTime());
     }
 
-    public synchronized void terminate() {
+    public void terminate() {
         cancelTimer();
     }
 
-    public synchronized void reset() {
+    public void reset() {
         lastKnownEnergyValue = 0;
         estimatedEnergy = 0D;
         totalEnergy = 0D;
@@ -313,7 +310,7 @@ public class OMaticMachine {
         startEnergyValue = 0;
     }
 
-    public synchronized void disable(boolean disable) {
+    public void disable(boolean disable) {
         cancelTimer();
         this.disable = disable;
     }

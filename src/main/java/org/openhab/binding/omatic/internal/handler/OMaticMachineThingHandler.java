@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -28,6 +29,7 @@ import org.openhab.binding.omatic.internal.OMaticMachineThingConfig;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachine;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachineUtil;
 import org.openhab.binding.omatic.internal.event.OMaticEventSubscriber;
+import org.openhab.core.common.ThreadPoolManager;
 import org.openhab.core.events.Event;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemNotFoundException;
@@ -67,10 +69,16 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
 
     private static final Logger logger = LoggerFactory.getLogger(OMaticMachineThingHandler.class);
 
+    private static final String THREADPOOL_NAME = "omatic";
+
+    private static final String QUANTITY_ENERGY = CoreItemFactory.NUMBER + ":Energy";
+    private static final String QUANTITY_POWER = CoreItemFactory.NUMBER + ":Power";
     private static Set<String> POWER_ITEM_TYPES = new HashSet<>();
     static {
         POWER_ITEM_TYPES.add(CoreItemFactory.SWITCH);
         POWER_ITEM_TYPES.add(CoreItemFactory.NUMBER);
+        POWER_ITEM_TYPES.add(QUANTITY_ENERGY);
+        POWER_ITEM_TYPES.add(QUANTITY_POWER);
     }
 
     private static Set<String> ENERGY_ITEM_TYPES = new HashSet<>();
@@ -90,6 +98,8 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     private @Nullable Double staticPower = null;
 
     private OMaticMachineThingConfig config = getConfigAs(OMaticMachineThingConfig.class);
+
+    private final ScheduledExecutorService scheduler = ThreadPoolManager.getScheduledPool(THREADPOOL_NAME);
 
     public OMaticMachineThingHandler(Thing thing, OMaticEventSubscriber eventSubscriber, ItemRegistry itemRegistry) {
         super(thing);
