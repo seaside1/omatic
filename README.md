@@ -202,5 +202,10 @@ is finished what the consumption is and takes the difference between the two.
 * More statistics, Average Cost, average consumption, average power usage etc
 * Better energy estimate calculations
 
+## Changelog
+Alpha5
+- Fixed synchronization issues deadlock
+- Fixed Number:Energy and Number:Power
+
 ## Resources
-https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA4.jar/org.openhab.binding.omatic-3.x.x-ALPHA4.jar
+https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA5.jar/org.openhab.binding.omatic-3.x.x-ALPHA5.jar
