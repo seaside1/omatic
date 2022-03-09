@@ -91,7 +91,7 @@ The binding has no configuration options, all configuration is done at the Thing
 | Total Cost(Est)    | Number    | Total estimated cost (kWh * cost)                                    | Read        |
 | Running Time       | Number    | Current machine running time in seconds                              | Read        |
 | Running Time Str   | String    | Current machine running time formatted string                        | Read        |
-| Tot.Running Time   | String    | Total machine running time in seconds                                | Read        |
+| Tot.Running Time   | Number    | Total machine running time in seconds                                | Read        |
 | Tot.Running TimeStr| String    | Total machine running time formatted string                          | Read        |
 | State              | String    | Current state of the State machine                                   | Read        |
 | Started            | String    | Timestamp for when the machine was started                          | Read        |
