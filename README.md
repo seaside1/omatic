@@ -203,11 +203,11 @@ is finished what the consumption is and takes the difference between the two.
 * Better energy estimate calculations
 
 ## Changelog
-Alpha7
+### Alpha7
 - Fixed type of total-running-time, change to Number
-Alpha6
+### Alpha6
 - Fixed Quantity Type parsing
-Alpha5
+### Alpha5
 - Fixed synchronization issues deadlock
 - Fixed Number:Energy and Number:Power
 
