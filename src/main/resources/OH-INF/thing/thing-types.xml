@@ -147,7 +147,7 @@
 		<state readOnly="true"></state>
 	</channel-type>
 	<channel-type id="total-time">
-		<item-type>String</item-type>
+		<item-type>Number</item-type>
 		<label>Total Running Time</label>
 		<description>Total running time</description>
 		<state readOnly="true"></state>
