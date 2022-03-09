@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 public class OMaticMachineUtil {
     private static final Logger logger = LoggerFactory.getLogger(OMaticMachineUtil.class);
+    private static final String WHITE_SPACE_REGEX = "\\s+";
+    private static final String QUANTITY = "Quantity";
 
     @SuppressWarnings("null")
     public static long loadPropertyAsLong(Thing thing, String property) {
@@ -87,6 +89,11 @@ public class OMaticMachineUtil {
             logger.error("Failed to convert value to decimalType: {}", dValue, x);
         }
         return state;
+    }
+
+    public static double getItemDoubleValue(String type, String stringValue) throws NumberFormatException {
+        final String value = (type.equals(QUANTITY)) ? stringValue.split(WHITE_SPACE_REGEX)[0] : stringValue;
+        return Double.parseDouble(value);
     }
 
     public static String convertSecondsToTimeString(double d) {

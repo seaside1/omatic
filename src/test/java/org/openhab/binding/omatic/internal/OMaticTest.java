@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachine;
 import org.openhab.binding.omatic.internal.api.model.OMaticMachineState;
+import org.openhab.binding.omatic.internal.api.model.OMaticMachineUtil;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -54,5 +55,11 @@ public class OMaticTest {
         Thread.sleep(1100);
         machine.powerInput(9);
         assertEquals(OMaticMachineState.COMPLETE, machine.getState());
+    }
+
+    @Test
+    public void testParseQuantity() {
+        double val = OMaticMachineUtil.getItemDoubleValue("Quantity", "13 W");
+        assertEquals(13, val);
     }
 }

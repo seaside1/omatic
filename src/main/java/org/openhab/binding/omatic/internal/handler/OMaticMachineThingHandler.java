@@ -62,7 +62,6 @@ import org.slf4j.helpers.MessageFormatter;
  */
 @NonNullByDefault
 public class OMaticMachineThingHandler extends BaseThingHandler implements PropertyChangeListener {
-
     private static final String PREFIX_DEBUG_LOG = "[{}] [{}] {}";
 
     private static final String PREFIX_INFO_LOG = "[{}] {}";
@@ -70,10 +69,9 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     private static final Logger logger = LoggerFactory.getLogger(OMaticMachineThingHandler.class);
 
     private static final String THREADPOOL_NAME = "omatic";
-
     private static final String QUANTITY_ENERGY = CoreItemFactory.NUMBER + ":Energy";
     private static final String QUANTITY_POWER = CoreItemFactory.NUMBER + ":Power";
-    private static Set<String> POWER_ITEM_TYPES = new HashSet<>();
+    private static final Set<String> POWER_ITEM_TYPES = new HashSet<>();
     static {
         POWER_ITEM_TYPES.add(CoreItemFactory.SWITCH);
         POWER_ITEM_TYPES.add(CoreItemFactory.NUMBER);
@@ -400,6 +398,7 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
             logDebug("Name of state event: {} configName: {}", itemName, config.getPowerInputItem());
             stringValue = ((ItemStateEvent) event).getItemState().toFullString();
             String type = ((ItemStateEvent) event).getType();
+
             if (itemName.equals(config.getPowerInputItem())) {
                 double itemValue = 0;
                 if (staticPower != null && staticPower > 0) {
@@ -407,10 +406,11 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
                     logDebug("Got static value: {}", itemValue);
                 } else {
                     try {
-                        itemValue = Double.parseDouble(stringValue);
+                        itemValue = OMaticMachineUtil.getItemDoubleValue(type, stringValue);
                         logDebug("Got number value: {}", itemValue);
                     } catch (NumberFormatException ex) {
-                        logger.error("Failed to parse value from event {}", ((ItemStateEvent) event).getPayload());
+                        logger.error("Failed to parse value from event: {} type: {} stringValue: {}",
+                                ((ItemStateEvent) event).getPayload(), type, stringValue);
                         return;
                     }
                 }
@@ -418,7 +418,7 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
             } else if (itemName.equals(config.getEnergyInputItem())) {
                 Double itemValue = null;
                 try {
-                    itemValue = Double.parseDouble(stringValue);
+                    itemValue = OMaticMachineUtil.getItemDoubleValue(type, stringValue);
                     oMaticMachine.energyInput(itemValue);
                 } catch (NumberFormatException ex) {
                     logger.error("Failed to parse value from event {}", ((ItemStateEvent) event).getPayload());
