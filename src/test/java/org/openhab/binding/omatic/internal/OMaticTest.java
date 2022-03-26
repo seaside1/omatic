@@ -59,7 +59,8 @@ public class OMaticTest {
 
     @Test
     public void testParseQuantity() {
-        double val = OMaticMachineUtil.getItemDoubleValue("Quantity", "13 W");
-        assertEquals(13, val);
+        double val = OMaticMachineUtil.getItemDoubleValue("Quantity", "62 w",
+                "{\"type\":\"Quantity\",\"value\":\"1765.013 W\"}");
+        assertEquals(1765.013d, val);
     }
 }

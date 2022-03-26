@@ -24,6 +24,8 @@ import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 /**
  * The {@link OMaticMachineUtil} Utilities used by OMatic binding
  *
@@ -31,6 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 public class OMaticMachineUtil {
+    private static final Gson GSON = new Gson();
     private static final Logger logger = LoggerFactory.getLogger(OMaticMachineUtil.class);
     private static final String WHITE_SPACE_REGEX = "\\s+";
     private static final String QUANTITY = "Quantity";
@@ -91,9 +94,18 @@ public class OMaticMachineUtil {
         return state;
     }
 
-    public static double getItemDoubleValue(String type, String stringValue) throws NumberFormatException {
-        final String value = (type.equals(QUANTITY)) ? stringValue.split(WHITE_SPACE_REGEX)[0] : stringValue;
-        return Double.parseDouble(value);
+    public static double getItemDoubleValue(String type, String value, String raw) throws NumberFormatException {
+        String stringValue = value;
+        if (type.equals(QUANTITY)) {
+            try {
+                final QuantityValue qValue = GSON.fromJson(raw, QuantityValue.class);
+                stringValue = qValue != null && qValue.getValue() != null
+                        ? qValue.getValue().split(WHITE_SPACE_REGEX)[0]
+                        : value;
+            } catch (Exception e) {
+            }
+        }
+        return Double.parseDouble(stringValue);
     }
 
     public static String convertSecondsToTimeString(double d) {
@@ -120,5 +132,23 @@ public class OMaticMachineUtil {
             timeString += " " + second + "s";
         }
         return timeString;
+    }
+
+    class QuantityValue {
+        private String type;
+        private String value;
+
+        public QuantityValue(String type, String value) {
+            this.type = type;
+            this.value = value;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 }
