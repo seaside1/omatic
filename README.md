@@ -203,6 +203,9 @@ is finished what the consumption is and takes the difference between the two.
 * Better energy estimate calculations
 
 ## Changelog
+### Alpha9
+- Fixed one more potential deadlock
+- Fixed quantity types
 ### Alpha7
 - Fixed type of total-running-time, change to Number
 ### Alpha6
@@ -212,4 +215,4 @@ is finished what the consumption is and takes the difference between the two.
 - Fixed Number:Energy and Number:Power
 
 ## Resources
-https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA7/org.openhab.binding.omatic-3.x.x-ALPHA7.jar
+https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA9/org.openhab.binding.omatic-3.x.x-ALPHA9.jar
