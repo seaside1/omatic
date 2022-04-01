@@ -17,14 +17,13 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
 
 /**
  * The {@link OMaticMachineUtil} Utilities used by OMatic binding
@@ -33,10 +32,8 @@ import com.google.gson.Gson;
  */
 @NonNullByDefault
 public class OMaticMachineUtil {
-    private static final Gson GSON = new Gson();
     private static final Logger logger = LoggerFactory.getLogger(OMaticMachineUtil.class);
-    private static final String WHITE_SPACE_REGEX = "\\s+";
-    private static final String QUANTITY = "Quantity";
+    private static final String QUANTITY = "\"type\":\"Quantity\"";
 
     @SuppressWarnings("null")
     public static long loadPropertyAsLong(Thing thing, String property) {
@@ -94,18 +91,15 @@ public class OMaticMachineUtil {
         return state;
     }
 
-    public static double getItemDoubleValue(String type, String value, String raw) throws NumberFormatException {
-        String stringValue = value;
-        if (type.equals(QUANTITY)) {
+    public static double getItemDoubleValue(String payload, String value) throws NumberFormatException {
+        if (payload.contains(QUANTITY)) {
             try {
-                final QuantityValue qValue = GSON.fromJson(raw, QuantityValue.class);
-                stringValue = qValue != null && qValue.getValue() != null
-                        ? qValue.getValue().split(WHITE_SPACE_REGEX)[0]
-                        : value;
+                return (new QuantityType<>(value)).doubleValue();
             } catch (Exception e) {
+                logger.error("Failed parsing qValue: {}", value);
             }
         }
-        return Double.parseDouble(stringValue);
+        return Double.parseDouble(value);
     }
 
     public static String convertSecondsToTimeString(double d) {
@@ -132,23 +126,5 @@ public class OMaticMachineUtil {
             timeString += " " + second + "s";
         }
         return timeString;
-    }
-
-    class QuantityValue {
-        private String type;
-        private String value;
-
-        public QuantityValue(String type, String value) {
-            this.type = type;
-            this.value = value;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public String getValue() {
-            return value;
-        }
     }
 }

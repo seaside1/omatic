@@ -393,12 +393,12 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
         logDebug("Handle event: {}", event.getTopic());
         String itemName = null;
         String stringValue = null;
+
         if (event instanceof ItemStateEvent) {
             itemName = ((ItemStateEvent) event).getItemName();
             logDebug("Name of state event: {} configName: {}", itemName, config.getPowerInputItem());
             stringValue = ((ItemStateEvent) event).getItemState().toFullString();
-            final String type = ((ItemStateEvent) event).getType();
-            final String raw = ((ItemStateEvent) event).getPayload();
+            String payload = ((ItemStateEvent) event).getPayload();
             if (itemName.equals(config.getPowerInputItem())) {
                 double itemValue = 0;
                 if (staticPower != null && staticPower > 0) {
@@ -406,11 +406,14 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
                     logDebug("Got static value: {}", itemValue);
                 } else {
                     try {
-                        itemValue = OMaticMachineUtil.getItemDoubleValue(type, stringValue, raw);
-                        logDebug("Got number value: {}", itemValue);
+
+                        logDebug("Parsing payload: {} stringValue: {}", payload, stringValue);
+                        itemValue = OMaticMachineUtil.getItemDoubleValue(payload, stringValue);
+                        logDebug("Parsed itemValue: {} ", itemValue);
                     } catch (NumberFormatException ex) {
-                        logger.error("Failed to parse value from event: {} type: {} stringValue: {}",
-                                ((ItemStateEvent) event).getPayload(), type, stringValue);
+                        logger.error("Failed to parse value from event: {} payload: {} stringValue: {}",
+                                ((ItemStateEvent) event).getPayload(), payload, stringValue);
+                        logger.debug("Exception m: {}", ex.getMessage(), ex);
                         return;
                     }
                 }
@@ -418,10 +421,10 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
             } else if (itemName.equals(config.getEnergyInputItem())) {
                 Double itemValue = null;
                 try {
-                    itemValue = OMaticMachineUtil.getItemDoubleValue(type, stringValue, raw);
+                    itemValue = OMaticMachineUtil.getItemDoubleValue(payload, stringValue);
                     oMaticMachine.energyInput(itemValue);
                 } catch (NumberFormatException ex) {
-                    logger.error("Failed to parse value from event {}", ((ItemStateEvent) event).getPayload());
+                    logger.error("Failed to parse value from event: {}", ((ItemStateEvent) event).getPayload());
                     return;
                 }
             } else {
