@@ -203,6 +203,8 @@ is finished what the consumption is and takes the difference between the two.
 * Better energy estimate calculations
 
 ## Changelog
+### Alpha10
+- Fixed parsing of quantity types by using openhab core classes
 ### Alpha9
 - Fixed one more potential deadlock
 - Fixed quantity types
@@ -215,4 +217,4 @@ is finished what the consumption is and takes the difference between the two.
 - Fixed Number:Energy and Number:Power
 
 ## Resources
-https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA9/org.openhab.binding.omatic-3.x.x-ALPHA9.jar
+https://github.com/seaside1/omatic/releases/download/org.openhab.binding.omatic-3.x.x-ALPHA10/org.openhab.binding.omatic-3.x.x-ALPHA10.jar
