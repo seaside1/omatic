@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2021 Contributors to the openHAB project
+ * Copyright (c) 2010-2022 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -175,7 +175,7 @@ public class OMaticMachine {
 
     private void setStateIdle() {
         state = OMaticMachineState.IDLE;
-        if (idleTimeStamp == Instant.EPOCH) { // Idle for first time
+        if (idleTimeStamp.equals(Instant.EPOCH)) { // Idle for first time
             idleTimeStamp = nowTimeStamp;
         }
     }
@@ -264,7 +264,7 @@ public class OMaticMachine {
     }
 
     public long getRunningTime() {
-        if (startedTimeStamp == Instant.EPOCH) {
+        if (startedTimeStamp.equals(Instant.EPOCH)) {
             return -1;
         }
         return isRunning() ? Duration.between(startedTimeStamp, nowTimeStamp).getSeconds()
@@ -272,11 +272,11 @@ public class OMaticMachine {
     }
 
     public @Nullable String getCompletedTimeStr() {
-        return completedTimeStamp == Instant.EPOCH ? null : dateTimeFormatter.format(completedTimeStamp);
+        return completedTimeStamp.equals(Instant.EPOCH) ? null : dateTimeFormatter.format(completedTimeStamp);
     }
 
     public @Nullable String getStartedTimeStr() {
-        return startedTimeStamp == Instant.EPOCH ? null : dateTimeFormatter.format(startedTimeStamp);
+        return startedTimeStamp.equals(Instant.EPOCH) ? null : dateTimeFormatter.format(startedTimeStamp);
     }
 
     public String getRunningTimeString() {
