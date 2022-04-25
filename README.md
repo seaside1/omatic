@@ -15,12 +15,11 @@ Please take a look at ThomDietrich's [post](https://community.openhab.org/t/wash
 The aim of this binding is to simplify the rules and do the state transitions and calculations in a java binding.
 It should thus be easier to write smaller and simpler rules in DSL or Jython to handle the state Machine.
 ## Installation
-- Download jar file from here: (IMPORTANT, use download button on github otherwise the file will be corrupt) <br>
-   https://github.com/seaside1/omatic/raw/master/bin/org.openhab.binding.omatic-OH3-alpha3.jar <br>
-   OH2 version found in https://github.com/seaside1/omatic/tree/master/bin (not supported anymore) <br> 
-- Verify filesize should be 34.5 kb: 
-- Copy the jar file to the addon foler usually located under /usr/share/openhab/addons
-- Restart openhab
+- Use OpenHAB Marketplace for installation (Recommended) or
+- Download jar file from here:  <br>
+    https://github.com/seaside1/omatic/releases <br>
+    Copy the jar file to the addon foler usually located under /usr/share/openhab/addons
+    Restart openhab
 
 
 ## States
