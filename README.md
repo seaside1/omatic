@@ -5,7 +5,7 @@ The component is generic and any type of equipment can be monitored as long as
 it is possible to read its power consumption.
 
 Examples of usage: 
-- Monitor your electric car. Once the car has finished charging, you will get notified about the cost, consumption and time it took.
+- Monitor your electric car when it is charging. Once the charing is done, you will get notified about the cost, consumption and time it took.
 - Monitor your dishwasher, dryer or washing machine. Once they are finished you will get notified about the cost, consumption and time it took.
 - Send info when the power consumption is above a certain limit for a device.
 
