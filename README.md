@@ -20,6 +20,8 @@ It should thus be easier to write smaller and simpler rules in DSL or Jython to 
     https://github.com/seaside1/omatic/releases <br>
     Copy the jar file to the addon foler usually located under /usr/share/openhab/addons
     Restart openhab
+- Add an OMatic State Machine as thing using the GUI and set its parameters (It is also possible to create a .thing file and do this manually)    
+
 
 
 ## States
