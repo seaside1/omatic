@@ -73,7 +73,7 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     private static final String QUANTITY_POWER = CoreItemFactory.NUMBER + ":Power";
     private static final Set<String> POWER_ITEM_TYPES = new HashSet<>();
     static {
-        POWER_ITEM_TYPES.add(CoreItemFactory.SWITCH);
+        POWER_ITEM_TYPES.add(CoreItemFactory.SWITCH); // Used for static power
         POWER_ITEM_TYPES.add(CoreItemFactory.NUMBER);
         POWER_ITEM_TYPES.add(QUANTITY_ENERGY);
         POWER_ITEM_TYPES.add(QUANTITY_POWER);
@@ -82,6 +82,8 @@ public class OMaticMachineThingHandler extends BaseThingHandler implements Prope
     private static Set<String> ENERGY_ITEM_TYPES = new HashSet<>();
     static {
         ENERGY_ITEM_TYPES.add(CoreItemFactory.NUMBER);
+        ENERGY_ITEM_TYPES.add(QUANTITY_ENERGY);
+
     }
 
     @Nullable
