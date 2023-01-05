@@ -71,7 +71,7 @@ public class OMaticMachineUtil {
         State state = UnDefType.UNDEF;
         try {
             if (lValue != -1) {
-                state = new DecimalType(lValue);
+                state = new DecimalType(Long.valueOf(lValue));
             }
         } catch (Exception x) {
             logger.error("Failed to convert value to decimalType: {}", lValue, x);
@@ -83,7 +83,7 @@ public class OMaticMachineUtil {
         State state = UnDefType.NULL;
         try {
             if (dValue != null) {
-                state = new DecimalType(dValue.doubleValue());
+                state = new DecimalType(dValue);
             }
         } catch (Exception x) {
             logger.error("Failed to convert value to decimalType: {}", dValue, x);
