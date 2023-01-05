@@ -204,6 +204,8 @@ is finished what the consumption is and takes the difference between the two.
 * Better energy estimate calculations
 
 ## Changelog
+#### BETA2
+- Creation of Decimal Type fixed for future openHAB version
 #### BETA1
 - Fixed energy quantity type
 ### Alpha10
