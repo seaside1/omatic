@@ -4,9 +4,9 @@
 	xsi:schemaLocation="https://openhab.org/schemas/addon/v1.0.0 https://openhab.org/schemas/addon-1.0.0.xsd">
 
 	<type>binding</type>
-        <name>State O-Matic Binding</name>
-	 <description>The State O-Matic binding can be utilized to monitor and measure various household appliances, such as
-                washing machines, dryers and dishwashers. It's possible to get notification when the dryer is done, and also to
-                measure power and energy consumption.</description>
+	<name>State O-Matic Binding</name>
+	<description>The State O-Matic binding can be utilized to monitor and measure various household appliances, such as
+		washing machines, dryers and dishwashers. It's possible to get notification when the dryer is done, and also to
+		measure power and energy consumption.</description>
 	<connection>local</connection>
 </addon:addon>
